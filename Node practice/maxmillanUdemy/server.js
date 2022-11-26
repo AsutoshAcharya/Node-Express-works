@@ -1,12 +1,32 @@
 //require used to import something in js
 //path to your module starts with "./yourModule"
 const http = require("http");
+const { text } = require("stream/consumers");
 //called by node js every time a request is made to server
 
 //createServer returns server
+
+const fs = require("fs");
 const server = http.createServer((req, res) => {
   console.log(req.url, req.method, req.headers);
+  const url = req.url;
+  const method = req.method;
+  if (url === "/") {
+    res.write("<html>");
+    res.write("<head><title>Enter message</title> </head>");
+    res.write(
+      '<body><form action="/message" method="POST"><input type="text" name="message"><br/><button type="submit">send</button> </form></body>'
+    );
+    res.write("</html>");
+    return res.end();
+  }
 
+  if (url === "/message" && method === "POST") {
+    fs.writeFileSync("message.txt", "dummy");
+    res.statusCode = 302;
+    res.setHeader("Location", "/");
+    return res.end();
+  }
   res.setHeader("Content-Type", "text/html");
 
   res.write("<html>");
