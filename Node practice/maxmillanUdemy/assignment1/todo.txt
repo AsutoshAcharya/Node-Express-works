@@ -1,0 +1,6 @@
+1.Spin up a node.js server at any port
+2.Handle 2 routes "/" and "/users"
+    return some greetings
+    return dummy user with some list
+3.add a form with username input to the "/" page and on submit post request tp "/create-user" on button click
+4.add the "/create-user" route parse the incoming data and store it in a file
