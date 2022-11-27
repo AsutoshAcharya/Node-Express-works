@@ -1,7 +1,7 @@
 //require used to import something in js
 //path to your module starts with "./yourModule"
 const http = require("http");
-const { text } = require("stream/consumers");
+// const { text } = require("stream/consumers");
 //called by node js every time a request is made to server
 
 //createServer returns server
@@ -29,20 +29,17 @@ const server = http.createServer((req, res) => {
       body.push(chunk);
     });
 
-    req.on("end", () => {
+    return req.on("end", () => {
       const parseBody = Buffer.concat(body).toString();
       const message = parseBody.split("=")[1];
-      fs.writeFileSync("message.txt", message);
+      fs.writeFile("message.txt", message, (error) => {
+        res.statusCode = 302;
+        res.setHeader("Location", "/");
+        return res.end();
+      });
     });
-
-    //data event with on
-
-    res.statusCode = 302;
-    res.setHeader("Location", "/");
-    return res.end();
   }
   res.setHeader("Content-Type", "text/html");
-
   res.write("<html>");
   res.write("<head><title>My fist server</title> </head>");
   res.write("<body><h1>My first node.js server</h1></body>");
