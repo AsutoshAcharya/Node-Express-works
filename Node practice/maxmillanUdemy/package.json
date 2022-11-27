@@ -1,0 +1,16 @@
+{
+  "name": "maxmillanudemy",
+  "version": "1.0.0",
+  "description": "complete node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Asutosh Acharya",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
