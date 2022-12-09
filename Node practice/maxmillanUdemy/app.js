@@ -5,12 +5,14 @@ const express = require("express");
 
 const adminRouter = require("./routes/admin.js");
 const shopRouter = require("./routes/shop");
+const userRouter = require("./routes/index");
 const app = express();
 
 //middlewares
 
 app.use("/admin", adminRouter);
 app.post("/admin", adminRouter);
+app.use(userRouter);
 app.use(shopRouter);
 
 //404 Error page
