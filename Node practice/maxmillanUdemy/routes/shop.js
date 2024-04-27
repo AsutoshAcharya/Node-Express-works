@@ -3,13 +3,14 @@ const path = require("path");
 const express = require("express");
 
 const rootDir = require("../util/path");
-const adminData = require("./admin");
+const Products = require("../models/product.js");
 
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  const products = adminData.products;
-  res.render("shop", { prods: products, docTitle: "Shop" });
+  Products.fetchAll((prods) => {
+    res.render("shop", { prods: prods, docTitle: "Shop" });
+  });
 });
 
 module.exports = router;
