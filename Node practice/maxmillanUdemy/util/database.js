@@ -1,5 +1,5 @@
 // const { Pool } = require("pg");
-const Sequelize = require("sequelize");
+const Sequelize = require("sequelize").Sequelize;
 const config = {
   user: "postgres",
   host: "localhost",
