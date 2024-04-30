@@ -66,9 +66,12 @@ module.exports = class Product {
     return db.query(`SELECT * FROM ${products}`);
   }
 
-  static findById(prodId, cb) {
+  static findById(prodId) {
     // getProductsFromFile((products) => {
     //   return cb(products.find((product) => product.id === prodId) || []);
     // });
+    return db.query(`SELECT * FROM ${products} WHERE products.id= $1`, [
+      prodId,
+    ]);
   }
 };
