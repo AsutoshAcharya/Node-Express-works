@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const db = require("./util/database.js");
+const sequelize = require("./util/database.js");
 const errorController = require("./controllers/error");
 
 const app = express();
@@ -28,4 +28,12 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+sequelize
+  .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server
+  .then((result) => {
+    // console.log("result:", result);
+    app.listen(3000);
+  })
+  .catch((err) => {
+    // console.log("err:", err);
+  });
