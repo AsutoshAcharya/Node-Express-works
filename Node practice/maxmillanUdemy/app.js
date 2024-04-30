@@ -3,7 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database.js");
 const errorController = require("./controllers/error");
-
+const Product = require("./models/product.js");
+const User = require("./models/user.js");
 const app = express();
 
 app.set("view engine", "ejs");
@@ -28,8 +29,11 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+//User.hasMany(Product)
+
 sequelize
-  .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server
+  .sync({ force: true }) // it automatically creates the table if the table is not available on database and syncs the table data on the server
   .then((result) => {
     // console.log("result:", result);
     app.listen(3000);
