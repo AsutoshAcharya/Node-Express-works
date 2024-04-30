@@ -23,6 +23,15 @@ const shopRoutes = require("./routes/shop");
 //   });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+//middleware for incoming requests
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -33,9 +42,15 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 //User.hasMany(Product)
 
 sequelize
-  .sync({ force: true }) // it automatically creates the table if the table is not available on database and syncs the table data on the server
+  .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server
   .then((result) => {
     // console.log("result:", result);
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      User.create({ name: "Asu", email: "test@gmc.com" });
+    }
     app.listen(3000);
   })
   .catch((err) => {
