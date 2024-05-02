@@ -21,6 +21,7 @@ const shopRoutes = require("./routes/shop");
 //   .catch((err) => {
 //     console.log(err);
 //   });
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 //middleware for incoming requests
