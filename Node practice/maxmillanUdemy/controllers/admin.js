@@ -104,13 +104,20 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
-    .then((products) => {
-      res.render("admin/products", {
-        prods: products,
-        pageTitle: "Admin Products",
-        path: "/admin/products",
-      });
-    })
-    .catch((err) => console.log(err));
+  // Product.findAll()
+  //   .then((products) => {
+  //     res.render("admin/products", {
+  //       prods: products,
+  //       pageTitle: "Admin Products",
+  //       path: "/admin/products",
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
+  req.user.getProducts().then(products=>{ //using getProducts sequelize method to fetch products related to the user
+    res.render("admin/products", {
+      prods: products,
+      pageTitle: "Admin Products",
+      path: "/admin/products",
+    });
+  }).catch(err=>console.log(err))
 };
