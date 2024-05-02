@@ -40,7 +40,7 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-//User.hasMany(Product)
+User.hasMany(Product)
 
 sequelize
   .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server

@@ -27,18 +27,17 @@ exports.postAddProduct = (req, res, next) => {
   //     res.redirect("/");
   //   })
   //   .catch((err) => console.log(err));
-  Product.create({
-    title,
+  req.user.createProduct({ title,//auto create function by sequelize to associate product with user
     price,
     imageUrl,
-    description,
-  })
+    description}) 
     .then((result) => {
       console.log("Created product");
       res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
 };
+
 
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.params.productId;

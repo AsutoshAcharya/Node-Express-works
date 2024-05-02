@@ -3,7 +3,7 @@ const Sequelize = require("sequelize").Sequelize;
 const config = {
   user: "postgres",
   host: "localhost",
-  database: "test",
+  database: "postgres",
   password: "1234",
   port: 5432,
 };
