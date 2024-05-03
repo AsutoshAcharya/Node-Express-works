@@ -13,6 +13,9 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const Cart = require("./models/cart.js");
+const Cartitem = require("./models/cart-item.js");
+
 
 // db.query("SELECT * FROM products")
 //   .then((res) => {
@@ -40,9 +43,14 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-User.hasMany(Product)
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product,{through:Cartitem});
+Product.belongsToMany(Cart,{through:Cartitem});
 
 sequelize
+// .sync({force:true})
   .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server
   .then((result) => {
     // console.log("result:", result);
