@@ -68,24 +68,36 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
-      const cartproducts = [];
-      for (product of products) {
-        const cartProductData = cart?.products.find(
-          (prod) => prod.id === product.id
-        );
-        if (cartProductData) {
-          cartproducts.push({ productData: product, qty: cartProductData.qty });
-        }
-      }
-      res.render("shop/cart", {
-        path: "/cart",
-        pageTitle: "Your Cart",
-        products: cartproducts,
-      });
-    });
-  });
+  req.user
+    .getCart()
+    .then((cart) => cart.getProducts())
+    .then((products) =>   
+        res.render("shop/cart", {
+            path: "/cart",
+            pageTitle: "Your Cart",
+            products: products,
+          }))
+    .catch((err) => console.log(err));
+
+    
+  // Cart.getCart((cart) => {
+  //   Product.fetchAll((products) => {
+  //     const cartproducts = [];
+  //     for (product of products) {
+  //       const cartProductData = cart?.products.find(
+  //         (prod) => prod.id === product.id
+  //       );
+  //       if (cartProductData) {
+  //         cartproducts.push({ productData: product, qty: cartProductData.qty });
+  //       }
+  //     }
+  //     res.render("shop/cart", {
+  //       path: "/cart",
+  //       pageTitle: "Your Cart",
+  //       products: cartproducts,
+  //     });
+  //   });
+  // });
 };
 
 exports.postCart = (req, res, next) => {
