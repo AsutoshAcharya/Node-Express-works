@@ -15,7 +15,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const Cart = require("./models/cart.js");
 const Cartitem = require("./models/cart-item.js");
-
+const taskRoute = require("./routes/task.js");
 
 // db.query("SELECT * FROM products")
 //   .then((res) => {
@@ -38,6 +38,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/admin", adminRoutes);
+app.use("/tasks", taskRoute);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
@@ -46,11 +47,11 @@ Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
-Cart.belongsToMany(Product,{through:Cartitem});
-Product.belongsToMany(Cart,{through:Cartitem});
+Cart.belongsToMany(Product, { through: Cartitem });
+Product.belongsToMany(Cart, { through: Cartitem });
 
 sequelize
-// .sync({force:true})
+  //.sync({ force: true })
   .sync() // it automatically creates the table if the table is not available on database and syncs the table data on the server
   .then((result) => {
     // console.log("result:", result);
@@ -61,12 +62,14 @@ sequelize
       User.create({ name: "Asu", email: "test@gmc.com" });
     }
     return user;
-  }).then(user=>{
+  })
+  .then((user) => {
     return user.createCart();
-  }).then(cart=>{
-    app.listen(3000);
-
+  })
+  .then((cart) => {
+    app.listen(8080);
+    console.error("Server started at port 8080");
   })
   .catch((err) => {
-    // console.log("err:", err);
+    console.log("err:", err);
   });
