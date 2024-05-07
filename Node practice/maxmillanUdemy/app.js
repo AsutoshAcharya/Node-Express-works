@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database.js");
 const errorController = require("./controllers/error");
@@ -24,7 +25,8 @@ const taskRoute = require("./routes/task.js");
 //   .catch((err) => {
 //     console.log(err);
 //   });
-
+app.use(cors());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 //middleware for incoming requests

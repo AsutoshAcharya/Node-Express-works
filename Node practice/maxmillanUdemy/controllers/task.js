@@ -9,6 +9,7 @@ exports.getTasks = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 exports.addTask = (req, res, next) => {
+  console.log("body", req.body);
   Task.create({
     title: req.body.title,
     status: req.body.status,
