@@ -38,3 +38,19 @@ exports.deleteTask = (req, res, next) => {
         .send({ status: 400, message: "Task deletion failed", error: err })
     );
 };
+
+exports.moveTask = (req, res, next) => {
+  const taskId = req.body.taskId;
+  const status = req.body.status;
+  Task.findByPk(taskId)
+    .then((task) => {
+      task.status = status;
+      return task.save();
+    })
+    .then((result) => {
+      res.status(200).send("task updated successfully");
+    })
+    .catch((err) => {
+      res.status(400).send("Update failed");
+    });
+};
