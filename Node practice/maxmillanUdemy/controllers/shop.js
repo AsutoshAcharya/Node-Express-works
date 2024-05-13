@@ -69,16 +69,16 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()//auto created method by sequelize
+    .getCart() //auto created method by sequelize
     .then((cart) => cart.getProducts())
-    .then((products) =>   
-        res.render("shop/cart", {
-            path: "/cart",
-            pageTitle: "Your Cart",
-            products: products,
-          }))
+    .then((products) =>
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        products: products,
+      })
+    )
     .catch((err) => console.log(err));
-
 
   // Cart.getCart((cart) => {
   //   Product.fetchAll((products) => {
@@ -101,26 +101,36 @@ exports.getCart = (req, res, next) => {
 };
 
 exports.postCart = (req, res, next) => {
-    const prodId = req.body.productId;
-    let fetchedCart;
-    req.user
+  const prodId = req.body.productId;
+  let newQty = 1;
+  let fetchedCart;
+  req.user
     .getCart()
     .then((cart) => {
-      fetchedCart=cart;
-      return cart.getProducts({where:{id:prodId}})
-    }).then(products=>{
+      fetchedCart = cart;
+      return cart.getProducts({ where: { id: prodId } });
+    })
+    .then((products) => {
       let product;
-      if(products.length>0){
-        product=products[0]
+      if (products.length > 0) {
+        product = products[0];
       }
-      let newQty=1;
-      if(product){
-        //
+
+      if (product) {
+        const oldQuantity = product.cartItem.quantity;
+        newQty = oldQuantity + 1;
+        return product;
       }
-      return Product.findByPk(prodId).then(product=>{
-        return fetchedCart.addProduct(product,{through:{quantity:newQty}});
-      }).then(()=>res.redirect("/cart")).catch(err=>console.log(err))
-    }).catch(err=>console.log(err));
+      return Product.findByPk(prodId)
+        .then((product) => {
+          return fetchedCart.addProduct(product, {
+            through: { quantity: newQty },
+          });
+        })
+        .then(() => res.redirect("/cart"))
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
   //same as view input name
   // console.log(prodId);
   // Product.findById(prodId, (product) => {
